@@ -1,31 +1,51 @@
-name: 'build-test'
-on:
-  issues:
-    types: [opened, edited]
-  issue_comment:
-    types: [created, edited]
-  discussion: 
-    types: [created, edited]
-  discussion_comment:
-    types: [created, edited]
+name: 'build'
+on: # rebuild any PRs and main branch changes
+  pull_request:
   pull_request_target:
-    types: [opened, edited]
-  pull_request_review_comment:
-    types: [created, edited]
-
+  workflow_dispatch:
+  push:
+    branches:
+      - master
+      - 'releases/*'
 
 jobs:
-  test: # make sure the action works on a clean machine without building
-    permissions:
-      issues: write
-      discussions: write
-      pull-requests: write
+  build: # make sure build/ci work properly
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: ./
-        env: 
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/checkout@v4
+      - name: Setup NodeJS
+        uses: actions/setup-node@v4
         with:
-          IS_MODIFY_TITLE: true
-          APPEND_TRANSLATION: true
+          node-version: 20
+      - name: Install packages
+        run: yarn install
+      - name: Build the action.
+        run: yarn run all
+      - name: Commit the dist directory.
+        if: ${{ github.event_name == 'push' }}
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          file_pattern: "dist/*"
+          commit_user_name: github-actions[bot]
+          commit_user_email: 41898282+github-actions[bot]@users.noreply.github.com
+          commit_message: "[BOT] Update dist folder."
+          add_options: '-u'
+
+  auto_merge:
+    needs: [ build ]
+    runs-on: ubuntu-latest
+    if: |
+      github.event_name == 'pull_request' &&
+      (github.actor == 'dependabot[bot]' || github.actor == 'dependabot-preview[bot]')
+    steps:
+      - name: "@dependabot merge"
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            github.rest.issues.createComment({
+              owner: context.payload.repository.owner.login,
+              repo: context.payload.repository.name,
+              issue_number: context.payload.pull_request.number,
+              body: '@dependabot merge'
+            })

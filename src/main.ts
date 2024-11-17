@@ -10,8 +10,6 @@ const DEFAULT_BOT_MESSAGE = `Bot detected the issue body's language is not Engli
 const DEFAULT_BOT_TOKEN = process.env.GITHUB_TOKEN
 
 async function main(): Promise<void> {
-  core.info(JSON.stringify(github.context))
-
   const isModifyTitle = core.getInput('IS_MODIFY_TITLE')
   const shouldAppendContent = core.getInput('APPEND_TRANSLATION')
   const botNote =
@@ -56,15 +54,11 @@ async function main(): Promise<void> {
     const title =
       translateTitle &&
       originTitle !== translateTitle &&
-      [originTitle, translateTitle].join(TRANSLATE_TITLE_DIVING)
+      translateTitle
     const body =
       translateComment &&
       originComment !== translateComment &&
-      `${originComment}
-${TRANSLATE_DIVIDING_LINE}
----
-${translateComment}
-`
+      translateComment
     await update(octokit, body || undefined, title || undefined)
   } else {
     const needCommitComment =
