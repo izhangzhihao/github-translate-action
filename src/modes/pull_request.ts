@@ -24,7 +24,7 @@ export default {
       return
     }
 
-    await octokit.pulls.update({
+    await octokit.rest.pulls.update({
       owner,
       repo,
       pull_number: pull_request?.number,
