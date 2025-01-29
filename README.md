@@ -42,8 +42,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           OPENAI_ENDPOINT: 'https://openrouter.ai/api/v1'
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          MODEL_NAME: 'qwen/qwen-2-7b-instruct:free'
-          FALLBACK_MODEL_NAME: 'deepseek/deepseek-r1:free'
+          MODEL_NAME: 'deepseek/deepseek-chat'
+          FALLBACK_MODEL_NAME: 'qwen/qwen-2-7b-instruct:free'
         with:
           IS_MODIFY_TITLE: true
           APPEND_TRANSLATION: true
