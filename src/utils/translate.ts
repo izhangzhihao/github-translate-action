@@ -3,7 +3,7 @@ import OpenAI from 'openai';
 
 const client = new OpenAI({
   baseURL: process.env['OPENAI_ENDPOINT'] ?? "https://openrouter.ai/api/v1",
-  apiKey: process.env['OPENAI_API_KEY']?? "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",
+  apiKey: process.env['OPENAI_API_KEY'],
 });
 
 export async function translate(text: string): Promise<string | undefined> {
