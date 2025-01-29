@@ -322,4 +322,11 @@ Kotlin: 243.22562.145-IJ
     console.log(result);
     expect(result).not.toBeUndefined();
   }, 200000);
+
+  it('should translate comment to English', async () => {
+    const text = `雀食可以，就是有点慢@@====`;
+    const result = await translate(text);
+    console.log(result);
+    expect(result).not.toBeUndefined();
+  }, 200000);
 });

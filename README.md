@@ -43,6 +43,7 @@ jobs:
           OPENAI_ENDPOINT: 'https://openrouter.ai/api/v1'
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           MODEL_NAME: 'deepseek/deepseek-r1:free'
+          FALLBACK_MODEL_NAME: 'google/gemma-2-9b-it:free'
         with:
           IS_MODIFY_TITLE: true
           APPEND_TRANSLATION: true
