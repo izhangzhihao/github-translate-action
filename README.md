@@ -1,7 +1,5 @@
 ![](./assets/logo.svg)
-# GitHub Translate Action
-
-En | [中文](./README_CN.md)
+# GitHub Translate Action using ChatGPT/DeepSeek
 
 A GitHub Action to translate non-English GitHub issues and GitHub discussions into English automatically.
 
@@ -42,6 +40,9 @@ jobs:
       - uses: izhangzhihao/github-translate-action@main
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          OPENAI_ENDPOINT: 'https://openrouter.ai/api/v1'
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          MODEL_NAME: 'deepseek/deepseek-r1:free'
         with:
           IS_MODIFY_TITLE: true
           APPEND_TRANSLATION: true

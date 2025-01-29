@@ -1,15 +1,23 @@
 import * as core from '@actions/core'
-import GoogleTranslate from '@tomsun28/google-translate-api'
-import { isEnglish } from './isEnglish'
+import OpenAI from 'openai';
+
+const client = new OpenAI({
+  baseURL: process.env['OPENAI_ENDPOINT'] ?? "https://openrouter.ai/api/v1",
+  apiKey: process.env['OPENAI_API_KEY'],
+});
 
 export async function translate(text: string): Promise<string | undefined> {
   try {
-    const resp = await GoogleTranslate(text, {to: 'en'})
-    return resp.text !== text ? resp.text : ''
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const modelName = process.env['MODEL_NAME'] ?? 'deepseek/deepseek-r1:free';
+    const response = await client.chat.completions.create({
+      messages: [{ role: 'user', content: `这是一个用户提交的issue/issue title，请检查原文是否包含非英文的内容，如果包含请翻译成英文，请注意，这是 markdown 格式的内容，请尽量保持格式不变，如果原来的格式有问题可以适当调整，只返回翻译后的内容，否则展示会有问题: ${text}` }],
+      model: modelName,
+    });
+    const translatedText = response.choices[0].message.content?.trim();
+    return translatedText !== text ? translatedText : '';
   } catch (err: any) {
-    core.error(err)
-    core.setFailed(err.message)
+    core.error(err);
+    core.setFailed(err.message);
   }
 }
 
@@ -24,8 +32,8 @@ export const translateText = {
     return [ translateBody?.[0]?.trim(), translateBody[1].trim() ]
   },
   stringify(body?: string, title?: string) {
-    let needCommitComment = body && body !== 'null' && !isEnglish(body)
-    let needCommitTitle = title && title !== 'null' && !isEnglish(title)
+    let needCommitComment = body && body !== 'null'
+    let needCommitTitle = title && title !== 'null'
 
     let translateOrigin = null
 
