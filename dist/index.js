@@ -822,20 +822,20 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-var _a, _b;
+var _a;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.translateText = exports.translate = void 0;
 const core = __importStar(__nccwpck_require__(2186));
 const openai_1 = __importDefault(__nccwpck_require__(47));
 const client = new openai_1.default({
     baseURL: (_a = process.env['OPENAI_ENDPOINT']) !== null && _a !== void 0 ? _a : "https://openrouter.ai/api/v1",
-    apiKey: (_b = process.env['OPENAI_API_KEY']) !== null && _b !== void 0 ? _b : "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",
+    apiKey: process.env['OPENAI_API_KEY'],
 });
 function translate(text) {
     var _a, _b, _c;
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const modelName = (_a = process.env['MODEL_NAME']) !== null && _a !== void 0 ? _a : 'qwen/qwen-2-7b-instruct:free';
+            const modelName = (_a = process.env['MODEL_NAME']) !== null && _a !== void 0 ? _a : 'deepseek/deepseek-chat';
             const content = `这是一个用户提交的issue/issue title，请检查原文是否包含非英文的内容，如果包含请翻译成英文，请注意，这是 markdown 格式的内容，请务必保持格式不变，如果原来的格式有问题可以适当调整，只返回翻译后的内容，否则展示会有问题: ${text}`;
             let response = yield client.chat.completions.create({
                 messages: [{ role: 'user', content: content }],
