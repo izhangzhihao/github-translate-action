@@ -836,7 +836,7 @@ function translate(text) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const modelName = (_a = process.env['MODEL_NAME']) !== null && _a !== void 0 ? _a : 'deepseek/deepseek-chat';
-            const content = `这是一个用户提交的issue/issue title，请检查原文是否包含非英文的内容，如果包含请翻译成英文，请注意，这是 markdown 格式的内容，请务必保持格式不变，如果原来的格式有问题可以适当调整，只返回翻译后的内容，否则展示会有问题: ${text}`;
+            const content = `这是一个用户提交的issue/issue title，请检查原文是否包含非英文的内容，如果包含请翻译成英文，请注意，请务必保持格式不变，只返回翻译后的内容，否则展示会有问题: ${text}`;
             let response = yield client.chat.completions.create({
                 messages: [{ role: 'user', content: content }],
                 model: modelName,
