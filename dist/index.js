@@ -835,14 +835,14 @@ function translate(text) {
     var _a, _b, _c;
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const modelName = (_a = process.env['MODEL_NAME']) !== null && _a !== void 0 ? _a : 'deepseek/deepseek-chat';
+            const modelName = (_a = process.env['MODEL_NAME']) !== null && _a !== void 0 ? _a : 'tngtech/deepseek-r1t2-chimera:free';
             const content = `这是一个用户提交的issue/issue title，请检查原文是否包含非英文的内容，如果包含请翻译成英文，请注意，请务必保持格式不变，只返回翻译后的内容，如果需要翻译的内容有特殊符号例如@@====，请务必保留，否则展示会有问题: ${text}`;
             let response = yield client.chat.completions.create({
                 messages: [{ role: 'user', content: content }],
                 model: modelName,
             });
             if (!response || !response.choices) {
-                const fallback = (_b = process.env['FALLBACK_MODEL_NAME']) !== null && _b !== void 0 ? _b : 'deepseek/deepseek-r1:free';
+                const fallback = (_b = process.env['FALLBACK_MODEL_NAME']) !== null && _b !== void 0 ? _b : 'qwen/qwen3-235b-a22b:free';
                 console.warn(`fallback to: ${fallback}`);
                 response = yield client.chat.completions.create({
                     messages: [{ role: 'user', content: content }],
