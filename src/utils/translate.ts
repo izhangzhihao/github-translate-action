@@ -8,14 +8,14 @@ const client = new OpenAI({
 
 export async function translate(text: string): Promise<string | undefined> {
   try {
-    const modelName = process.env['MODEL_NAME'] ?? 'deepseek/deepseek-chat';
+    const modelName = process.env['MODEL_NAME'] ?? 'deepseek/deepseek-chat-v3.1:free';
     const content = `这是一个用户提交的issue/issue title，请检查原文是否包含非英文的内容，如果包含请翻译成英文，请注意，请务必保持格式不变，只返回翻译后的内容，如果需要翻译的内容有特殊符号例如@@====，请务必保留，否则展示会有问题: ${text}`
     let response = await client.chat.completions.create({
       messages: [{ role: 'user', content: content }],
       model: modelName,
     });
     if (!response || !response.choices) {
-      const fallback = process.env['FALLBACK_MODEL_NAME'] ?? 'deepseek/deepseek-r1:free';
+      const fallback = process.env['FALLBACK_MODEL_NAME'] ?? 'qwen/qwen3-235b-a22b:free';
       console.warn(`fallback to: ${fallback}`);
       response = await client.chat.completions.create({
         messages: [{ role: 'user', content: content }],
