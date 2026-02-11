@@ -8,14 +8,14 @@ const client = new OpenAI({
 
 export async function translate(text: string): Promise<string | undefined> {
   try {
-    const modelName = process.env['MODEL_NAME'] ?? 'tngtech/deepseek-r1t2-chimera:free';
+    const modelName = process.env['MODEL_NAME'] ?? 'openrouter/free';
     const content = `This is a user-submitted issue/issue title. Please check if the original text contains non-English content. If it does, please translate it into English. Please be sure to keep the format unchanged and only return the translated content. If the content to be translated has special symbols such as @@====, please be sure to keep them, otherwise the display will be problematic: ${text}`
     let response = await client.chat.completions.create({
       messages: [{ role: 'user', content: content }],
       model: modelName,
     });
     if (!response || !response.choices) {
-      const fallback = process.env['FALLBACK_MODEL_NAME'] ?? 'qwen/qwen3-235b-a22b:free';
+      const fallback = process.env['FALLBACK_MODEL_NAME'] ?? 'deepseek/deepseek-r1-0528:free';
       console.warn(`fallback to: ${fallback}`);
       response = await client.chat.completions.create({
         messages: [{ role: 'user', content: content }],
