@@ -835,14 +835,14 @@ function translate(text) {
     var _a, _b, _c;
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const modelName = (_a = process.env['MODEL_NAME']) !== null && _a !== void 0 ? _a : 'tngtech/deepseek-r1t2-chimera:free';
+            const modelName = (_a = process.env['MODEL_NAME']) !== null && _a !== void 0 ? _a : 'openrouter/free';
             const content = `This is a user-submitted issue/issue title. Please check if the original text contains non-English content. If it does, please translate it into English. Please be sure to keep the format unchanged and only return the translated content. If the content to be translated has special symbols such as @@====, please be sure to keep them, otherwise the display will be problematic: ${text}`;
             let response = yield client.chat.completions.create({
                 messages: [{ role: 'user', content: content }],
                 model: modelName,
             });
             if (!response || !response.choices) {
-                const fallback = (_b = process.env['FALLBACK_MODEL_NAME']) !== null && _b !== void 0 ? _b : 'qwen/qwen3-235b-a22b:free';
+                const fallback = (_b = process.env['FALLBACK_MODEL_NAME']) !== null && _b !== void 0 ? _b : 'deepseek/deepseek-r1-0528:free';
                 console.warn(`fallback to: ${fallback}`);
                 response = yield client.chat.completions.create({
                     messages: [{ role: 'user', content: content }],
