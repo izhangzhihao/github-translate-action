@@ -862,12 +862,12 @@ exports.translate = translate;
 const MAGIC_JOIN_STRING = '@@====';
 exports.translateText = {
     parse(text) {
-        var _a;
+        var _a, _b;
         if (!text) {
             return [undefined, undefined];
         }
         const translateBody = text.split(MAGIC_JOIN_STRING);
-        return [(_a = translateBody === null || translateBody === void 0 ? void 0 : translateBody[0]) === null || _a === void 0 ? void 0 : _a.trim(), translateBody[1].trim()];
+        return [(_a = translateBody === null || translateBody === void 0 ? void 0 : translateBody[0]) === null || _a === void 0 ? void 0 : _a.trim(), (_b = translateBody === null || translateBody === void 0 ? void 0 : translateBody[1]) === null || _b === void 0 ? void 0 : _b.trim()];
     },
     stringify(body, title) {
         let needCommitComment = body && body !== 'null';
