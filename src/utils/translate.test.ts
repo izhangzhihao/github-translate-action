@@ -1,4 +1,42 @@
-import { translate } from './translate';
+import { translate, translateText } from './translate';
+
+describe('translateText.parse', () => {
+  it('should parse text with separator into body and title', () => {
+    const [body, title] = translateText.parse('hello@@====world');
+    expect(body).toBe('hello');
+    expect(title).toBe('world');
+  });
+
+  it('should return undefined for both when text is undefined', () => {
+    const [body, title] = translateText.parse(undefined);
+    expect(body).toBeUndefined();
+    expect(title).toBeUndefined();
+  });
+
+  it('should return undefined for both when text is empty', () => {
+    const [body, title] = translateText.parse('');
+    expect(body).toBeUndefined();
+    expect(title).toBeUndefined();
+  });
+
+  it('should return undefined title when separator is missing', () => {
+    const [body, title] = translateText.parse('Closed since we talked through email@@===');
+    expect(body).toBe('Closed since we talked through email@@===');
+    expect(title).toBeUndefined();
+  });
+
+  it('should handle text with separator but empty title', () => {
+    const [body, title] = translateText.parse('some body@@====');
+    expect(body).toBe('some body');
+    expect(title).toBe('');
+  });
+
+  it('should trim whitespace-only content after separator', () => {
+    const [body, title] = translateText.parse('some body@@====   ');
+    expect(body).toBe('some body');
+    expect(title).toBe('');
+  });
+});
 
 describe('translate function', () => {
   it('should translate text to English', async () => {
