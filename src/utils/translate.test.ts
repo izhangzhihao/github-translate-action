@@ -30,6 +30,12 @@ describe('translateText.parse', () => {
     expect(body).toBe('some body');
     expect(title).toBe('');
   });
+
+  it('should trim whitespace-only content after separator', () => {
+    const [body, title] = translateText.parse('some body@@====   ');
+    expect(body).toBe('some body');
+    expect(title).toBe('');
+  });
 });
 
 describe('translate function', () => {
